@@ -1,0 +1,24 @@
+{
+  "name": "tcw_place",
+  "version": "1.0.0",
+  "description": "a challenge based on r/place",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/upitroma/tcw_place.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/upitroma/tcw_place/issues"
+  },
+  "homepage": "https://github.com/upitroma/tcw_place#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "redis": "^4.1.0"
+  }
+}
