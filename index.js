@@ -5,7 +5,7 @@ const PORT = 3000
 const MAX_X = 160
 const MAX_Y = 90
 
-var canvas = new Array(MAX_X).fill(0).map(() => new Array(MAX_Y).fill("#ffffff"));
+var canvas = new Array(MAX_X).fill(0).map(() => new Array(MAX_Y).fill("#000000"));
 
 var app = express();
 
