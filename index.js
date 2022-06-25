@@ -2,26 +2,13 @@ const express = require('express');
 const redis = require('redis');
 
 const PORT = 3000
-const REDIS_IP = "172.17.0.2"
 
-const MAX_X = 4000
-const MAX_Y = 3000
+const MAX_X = 160
+const MAX_Y = 90
+
+var canvas = new Array(MAX_X).fill(0).map(() => new Array(MAX_Y).fill("#ffffff"));
 
 var app = express();
-
-const client = redis.createClient({
-    url: `redis://${REDIS_IP}`,
-    port: '6379'
-});
-
-client.connect()
-
-client.on('error', err => {
-    console.log('Redis client err ' + err);
-});
-client.on('connect', function() {
-    console.log('Connected to redis!');
-});
 
 //static website to view the canvas
 app.use(express.static('website'))
@@ -29,22 +16,29 @@ app.use(express.static('website'))
 //change a pixel
 //http://localhost:3000/change?x=5&y=10&col=3
 app.get("/change", function(req, res) {
-    res.send("x="+req.query.x+" y="+req.query.y+" col="+req.query.col)
-    client.set("x",req.query.x)
+
+    //TODO: validate params
+
+    //validate color
+    // console.log(req.query.col)
+    let color = "#"+req.query.col;
+    console.log(color)
+    // if(CSS.supports('color',color)){
+    //     res.send('{"msg":"ERR: invalid color. Please use color hex codes. ex: ff00ff"}')
+    //     return
+    // }
+
+    let x = parseInt(req.query.x)
+    let y = parseInt(req.query.y)
+
+    canvas[x][y]=color
+    res.setHeader('Content-Type', 'application/json');
+    res.send({"msg":"OK"})
 });
 
 app.get("/get", async function(req, res) {
-
-    try{
-        let x = await client.get("x")
-        res.send(x)
-
-    }catch(err){
-        console.error(err);
-        res.status(500);
-        res.send("err")
-    }
-
+    res.setHeader('Content-Type', 'application/json');
+    res.send({"canvas":canvas})
     // res.send("this will get the current data from redis. If a screenshot key is passed, return the data from that key instead")
 });
 
