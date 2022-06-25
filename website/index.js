@@ -1,3 +1,4 @@
+document.getElementById("message").innerHTML="Call the api to edit the canvas! <br><code>"+window.location.href+"change?x=5&y=10&col=ff0000 </code>"
 var canvas = document.getElementById("canvas")
 var ctx = canvas.getContext('2d');
 
@@ -7,7 +8,7 @@ const MAX_Y = 90
 //handle resize
 function resizeCanvas(){
     const aspectRatio = 16/9
-    const margin = 50
+    const margin = 100
     let width=window.innerWidth;
     let height=window.innerHeight
 
@@ -25,6 +26,7 @@ function resizeCanvas(){
 window.onresize = resizeCanvas;
 
 //fetch data from api
+var apiData
 async function getData(){
     url = window.location.href+"get"
     req = await fetch(url)
