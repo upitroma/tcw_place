@@ -54,6 +54,5 @@ async function render(){
         }
     }
 }
-setInterval(render(),2000);
+setInterval(render,2000);
 resizeCanvas()
-render()
