@@ -1,2 +1,2 @@
 # tcw_place
-a challenge based on r/place
+What if I took r/place and made it worse?
