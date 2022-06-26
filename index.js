@@ -2,8 +2,8 @@ const express = require('express');
 
 const PORT = 3000
 
-const MAX_X = 160
-const MAX_Y = 90
+const MAX_X = 320
+const MAX_Y = 180
 
 var canvas = new Array(MAX_X).fill(0).map(() => new Array(MAX_Y).fill("#000000"));
 
@@ -32,15 +32,15 @@ app.get("/change", function(req, res) {
         res.send({"msg":msg})
         return
     }
-    if(req.query.x>MAX_X || req.query.x<0){
+    if(req.query.x>=MAX_X || req.query.x<0){
         res.status(400)
-        msg=`ERROR: x must be between 0 and ${MAX_X}. Valid example: /change?x=5&y=10&col=ff0000 `
+        msg=`ERROR: x must be between 0 and ${MAX_X-1}. Valid example: /change?x=5&y=10&col=ff0000 `
         res.send({"msg":msg})
         return
     }
-    if(req.query.y>MAX_Y || req.query.y<0){
+    if(req.query.y>=MAX_Y || req.query.y<0){
         res.status(400)
-        msg=`ERROR: y must be between 0 and ${MAX_Y}. Valid example: /change?x=5&y=10&col=ff0000 `
+        msg=`ERROR: y must be between 0 and ${MAX_Y-1}. Valid example: /change?x=5&y=10&col=ff0000 `
         res.send({"msg":msg})
         return
     }
