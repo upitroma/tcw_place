@@ -2,8 +2,8 @@ document.getElementById("message").innerHTML="Call the api to edit the canvas! <
 var canvas = document.getElementById("canvas")
 var ctx = canvas.getContext('2d');
 
-const MAX_X = 160
-const MAX_Y = 90
+const MAX_X = 320
+const MAX_Y = 180
 
 //handle resize
 function resizeCanvas(){
