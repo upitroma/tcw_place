@@ -68,12 +68,7 @@ app.get("/change", function(req, res) {
 app.get("/get", async function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.send({"canvas":canvas})
-    // res.send("this will get the current data from redis. If a screenshot key is passed, return the data from that key instead")
 });
-
-// app.get("/screenshot", function(req, res) {
-//     res.send("this will save a snapshot of the current data, save it with a unique key, then return the key")
-// });
 
 var server = app.listen(PORT, function () {
     console.log("Server is running!")
