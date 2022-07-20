@@ -12,6 +12,9 @@ var app = express();
 //static website to view the canvas
 app.use(express.static('website'))
 
+//performance logging
+app.use(require('express-status-monitor')());
+
 //change a pixel
 //http://localhost:3000/change?x=5&y=10&col=ff0000
 app.get("/change", function(req, res) {
