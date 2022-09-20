@@ -15,10 +15,11 @@ def rand_val(min:int, max: int):
 async def calling():
     async with aiohttp.ClientSession() as session:
         while True:
-            call = url.format(rand_val(0,320), rand_val(0,180))
-            # call = url.format(rand_val(0,160), rand_val(0,90))
-            print("Calling" + call)
-            await session.get(call)
+            for i in range(160):
+                call = url.format(rand_val(160-i,160+i), rand_val(90-i,90+i))
+                # call = url.format(rand_val(0,160), rand_val(0,90))
+                print("Calling" + call)
+                await session.get(call)
 
 def running():
     asyncio.run(calling())
