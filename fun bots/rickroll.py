@@ -4,6 +4,8 @@ import json
 import time
 import grequests
 
+URL="http://10.60.2.54:8080"
+
 
 parallelTasks=1000
 global urls
@@ -72,17 +74,13 @@ print(len(map[0]))
 
 
 while True:
-	req = requests.get("http://10.60.2.96:3000/get")
+	req = requests.get(URL+"/get")
 	res = json.loads(req.text)
 
 	for x in range(posx-len(map[0]),posx):
 		for y in range(posy-len(map),posy):
-
-            # #treat 0 as transparent
-			# if(map[y-posy+len(map)][x-posx+len(map[0])]!=0):
-
 			if(res["canvas"][x][y]!="#"+col[map[y-posy+len(map)][x-posx+len(map[0])]]):
-				url="http://10.60.2.96:3000/change?x="+str(x)+"&y="+str(y)+"&col="+col[map[y-posy+len(map)][x-posx+len(map[0])]]
+				url=URL+"/change?x="+str(x)+"&y="+str(y)+"&col="+col[map[y-posy+len(map)][x-posx+len(map[0])]]
 				urls.append(url)
 				if len(urls)>parallelTasks:
 					blast() 
