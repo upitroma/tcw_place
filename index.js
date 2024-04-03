@@ -1,10 +1,59 @@
 const express = require('express');
+const sha256 = require('js-sha256');
 
 const PORT = 3000
 
 const MAX_X = 320
 const MAX_Y = 180
 
+const FLAG = "bsftw{YxqY3FKJu9EoebEKqENDSpAyVA9pyyTS}"
+
+const SERVER_SECRET = generateRandomString(32)
+
+function generateRandomString(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+console.log("Server secret: "+SERVER_SECRET)
+
+function generateRandomHexColor() {
+    return Math.floor(Math.random()*16777215).toString(16);
+}
+
+function getHash(secret,color){
+    return sha256(secret+color)
+}
+
+function validateWinCondition(secret,token,color){
+
+    if (sha256(secret+color)!=token){
+        return "Invalid token or color!"
+    }
+    // if canvas is 90% filled with the color
+    let count = 0
+    for (let i = 0; i < MAX_X; i++) {
+        for (let j = 0; j < MAX_Y; j++) {
+            if(canvas[i][j]=="#"+color){
+                count++
+            }
+        }
+    }
+    if((count/(MAX_X*MAX_Y))<0.9){
+        return "Not enough pixels filled with your color! "+ (count/(MAX_X*MAX_Y)).toString()
+    }
+
+    return FLAG
+
+}
+
+
+// networking / game logic
 var canvas = new Array(MAX_X).fill(0).map(() => new Array(MAX_Y).fill("#000000"));
 
 var app = express();
@@ -73,6 +122,23 @@ app.get("/get", async function(req, res) {
     res.send({"canvas":canvas})
 });
 
+app.get("/newColor", async function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    let color = generateRandomHexColor()
+    res.send({
+        "color":color,
+        "token":getHash(SERVER_SECRET,color)
+    })
+});
+
+app.get("/validate", async function(req, res) {
+    res.setHeader('Content-Type', 'application/json');
+    res.send({
+        "flag":validateWinCondition(SERVER_SECRET,req.query.token,req.query.color)
+    })
+});
+
+
 var server = app.listen(PORT, function () {
     console.log("Server is running!")
- })
+})

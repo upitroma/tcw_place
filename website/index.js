@@ -1,9 +1,31 @@
-document.getElementById("message").innerHTML="Call the api to edit the canvas! <br><code>"+window.location.href+"change?x=5&y=10&col=ff0000 </code>"
 var canvas = document.getElementById("canvas")
 var ctx = canvas.getContext('2d');
 
 const MAX_X = 320
 const MAX_Y = 180
+
+var TOKEN = ""
+var COLOR = ""
+
+//get color
+async function getColor(){
+    url = window.location.href+"newColor"
+    req = await fetch(url)
+    res = await req.json()
+    TOKEN=res.token
+    COLOR=res.color
+    document.getElementById("message").innerHTML="Your color is #"+COLOR+". Call the api to edit the canvas and fill the screen with your color! <br><code>"+window.location.href+"change?x=5&y=10&col="+COLOR+"</code>"
+
+}
+getColor()
+
+async function validate(){
+    url = window.location.href+"validate"
+    queryParam = "?token="+TOKEN+"&color="+COLOR
+    req = await fetch(url+queryParam)
+    res = await req.json()
+    alert(res.flag)
+}
 
 //handle resize
 function resizeCanvas(){
@@ -49,11 +71,18 @@ function drawPixel(x,y,col){
 }
 
 async function render(){
+    yourColorCount=0
     data = await getData()    
     for(x=0;x<MAX_X;x++){
         for(y=0;y<MAX_Y;y++){
             drawPixel(x,y,data.canvas[x][y])
+            if(data.canvas[x][y]=="#"+COLOR){
+                yourColorCount++
+            }
         }
+    }
+    if (yourColorCount>(MAX_X*MAX_Y*.9)){
+        validate()
     }
 }
 setInterval(render,2000);

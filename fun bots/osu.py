@@ -11,7 +11,7 @@ dimY=180
 posX=50
 posY=50
 
-URL="http://10.60.2.54:8080"
+URL="http://localhost:3000"
 
 screenshotPath="Screenshot from 2023-04-15 13-28-55.png"
 

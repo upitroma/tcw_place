@@ -5,7 +5,7 @@ import asyncio
 import random
 import aiohttp
 
-url = "http://10.60.2.96:3000/change?x={}&y={}&col=000000"
+url = "http://localhost:3000/change?x={}&y={}&col=000000"
 
 
 def rand_val(min:int, max: int):
@@ -18,7 +18,7 @@ async def calling():
             for i in range(160):
                 call = url.format(rand_val(160-i,160+i), rand_val(90-i,90+i))
                 # call = url.format(rand_val(0,160), rand_val(0,90))
-                print("Calling" + call)
+                print("Calling " + call)
                 await session.get(call)
 
 def running():
