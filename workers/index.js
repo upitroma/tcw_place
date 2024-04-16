@@ -7,6 +7,8 @@ const MAX_Y = 180
 
 var canvas = new Array(MAX_X).fill(0).map(() => new Array(MAX_Y).fill("#000000"));
 
+var pixelChangeCache=[]
+
 var app = express();
 
 //static website to view the canvas
@@ -62,7 +64,9 @@ app.get("/change", function(req, res) {
     let color = "#"+req.query.col;
     let x = parseInt(req.query.x)
     let y = parseInt(req.query.y)
-    canvas[x][y]=color
+    // canvas[x][y]=color
+
+    pixelChangeCache.push([x,y,color])
     
     res.status(200)
     res.send({"msg":"OK"})
@@ -76,3 +80,33 @@ app.get("/get", async function(req, res) {
 var server = app.listen(PORT, function () {
     console.log("Server is running!")
  })
+
+
+// sync with master node
+function syncToMaster() {
+
+    // get new canvas from master
+    fetch("http://master:3000/get")
+    .then(res => res.json())
+    .then(data => {
+        canvas = data.canvas
+    })
+
+    if (pixelChangeCache.length == 0) {
+        return
+    }
+    // send pixelChangeCache array to master
+    fetch("http://master:3000/update", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(pixelChangeCache)
+    })
+    .then(res => res.json())
+    .then(data => {
+        pixelChangeCache = []
+    })
+}
+
+setInterval(syncToMaster, 5000)

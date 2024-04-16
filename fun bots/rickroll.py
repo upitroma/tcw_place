@@ -4,7 +4,7 @@ import json
 import time
 import grequests
 
-URL="http://10.60.2.54:8080"
+URL="http://localhost:3000"
 
 
 parallelTasks=1000
