@@ -83,30 +83,32 @@ var server = app.listen(PORT, function () {
 
 
 // sync with master node
-function syncToMaster() {
+async function syncToMaster() {
 
-    // get new canvas from master
-    fetch("http://master:3000/get")
-    .then(res => res.json())
-    .then(data => {
-        canvas = data.canvas
-    })
+    try{
 
-    if (pixelChangeCache.length == 0) {
-        return
+        // send pixelChangeCache array to master
+        await fetch("http://master:3000/update", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pixelChangeCache)
+        })
+        .then(res => res.json())
+        .then(data => {
+            pixelChangeCache = []
+        })
+
+
+        // get new canvas from master
+        req = await fetch("http://master:3000/get")
+        res = await req.json()
+        canvas = res.canvas
     }
-    // send pixelChangeCache array to master
-    fetch("http://master:3000/update", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(pixelChangeCache)
-    })
-    .then(res => res.json())
-    .then(data => {
-        pixelChangeCache = []
-    })
+    catch(e){
+        syncToMaster()
+    }
 }
 
-setInterval(syncToMaster, 5000)
+setInterval(syncToMaster, 1000)

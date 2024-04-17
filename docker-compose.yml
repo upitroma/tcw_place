@@ -3,6 +3,7 @@ services:
     build: ./master/
     volumes:
       - ./master/:/app
+    restart: unless-stopped
 
   workers:
     build: ./workers/
@@ -10,9 +11,10 @@ services:
       - ./workers/:/app
     deploy:
       mode: replicated
-      replicas: 3
+      replicas: 5
     depends_on:
       - master
+    restart: unless-stopped
   
   loadbalancer:
     image: nginx
@@ -23,3 +25,4 @@ services:
     depends_on:
       - workers
       - master
+    restart: unless-stopped

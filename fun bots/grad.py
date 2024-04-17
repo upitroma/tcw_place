@@ -15,7 +15,7 @@ def blast():
     urls=[]
 
 while True:
-    req = requests.get("http://10.60.2.96:3000/get")
+    req = requests.get("http://localhost/get")
     res = json.loads(req.text)
 
 
@@ -27,7 +27,7 @@ while True:
             bgcolor = bgcolor ="%02x%02x%02x" % (int((x/320)*255),int((y/180)*255),255)
             if(res["canvas"][x][y]!="#"+bgcolor):
 
-                url="http://10.60.2.96:3000/change?x="+str(x)+"&y="+str(y)+"&col="+bgcolor
+                url="http://localhost/change?x="+str(x)+"&y="+str(y)+"&col="+bgcolor
                 urls.append(url)
                 if len(urls)>parallelTasks:
                     blast()     
