@@ -1,0 +1,28 @@
+services:
+  master:
+    build: ./master/
+    volumes:
+      - ./master/:/app
+    restart: unless-stopped
+
+  workers:
+    build: ./workers/
+    volumes:
+      - ./workers/:/app
+    deploy:
+      mode: replicated
+      replicas: 5
+    depends_on:
+      - master
+    restart: unless-stopped
+  
+  loadbalancer:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:3000
+    depends_on:
+      - workers
+      - master
+    restart: unless-stopped

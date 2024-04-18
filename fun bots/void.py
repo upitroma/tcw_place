@@ -5,7 +5,7 @@ import asyncio
 import random
 import aiohttp
 
-url = "http://10.60.2.96:3000/change?x={}&y={}&col=000000"
+url = "http://localhost/change?x={}&y={}&col=000000"
 
 
 def rand_val(min:int, max: int):
